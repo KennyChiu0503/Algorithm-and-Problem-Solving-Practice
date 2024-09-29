@@ -1,0 +1,9 @@
+3
+Amy
+John
+Xman
+4
+MakeFriend Amy John
+MakeFriend Amy Xman
+ListFriend Amy
+ListFriend Xman

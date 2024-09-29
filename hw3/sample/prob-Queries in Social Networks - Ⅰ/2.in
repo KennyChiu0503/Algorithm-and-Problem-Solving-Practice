@@ -1,0 +1,14 @@
+5
+Batman
+Ironman
+Spiderman
+Superman
+Xman
+7
+MakeFriend Xman Superman
+MakeFriend Batman Superman
+ListFriend Batman
+ListFriend Ironman
+MakeFriend Spiderman Superman
+ListFriend Ironman
+ListFriend Superman

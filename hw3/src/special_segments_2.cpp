@@ -5,24 +5,24 @@ using namespace std;
 int countSpecialSegments(const vector<int> &perm, int n) {
   int specialCount = 0;
 
+  // Deque to maintain the maximum in the current range
+  deque<int> dq;
+
   // Iterate over every possible starting point 'l'
   for (int l = 0; l < n; ++l) {
-    multiset<int>
-        windowElements; // Multiset to maintain elements in the current window
+    // Clear deque for new segment
+    dq.clear();
 
     // Iterate over all possible ending points 'r' from l to n-1
     for (int r = l; r < n; ++r) {
-      // Insert the current element into the multiset
-      windowElements.insert(perm[r]);
+      // Maintain maximum element in the deque
+      while (!dq.empty() && dq.back() < perm[r]) {
+        dq.pop_back();
+      }
+      dq.push_back(perm[r]);
 
-      // The maximum element in the current range [l, r] is the largest element
-      // in the multiset
-      int maxInWindow =
-          *windowElements
-               .rbegin(); // Last element in sorted order is the maximum
-
-      // Check if p[l] + p[r] equals the maximum element
-      if (perm[l] + perm[r] == maxInWindow) {
+      // The maximum in the current range [l, r] is dq.front()
+      if (perm[l] + perm[r] == dq.front()) {
         ++specialCount;
       }
     }
@@ -36,14 +36,11 @@ int main() {
   cin >> n;
   vector<int> perm(n);
 
-  // Input the permutation
   for (int i = 0; i < n; ++i) {
     cin >> perm[i];
   }
 
-  // Output the number of special segments
   cout << countSpecialSegments(perm, n) << endl;
 
   return 0;
 }
-

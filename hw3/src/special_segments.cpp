@@ -1,49 +1,48 @@
 #include <bits/stdc++.h>
-#include <deque>
-#include <iostream>
-#include <vector>
+#define N 200001
 using namespace std;
-
-// Function to count special segments
-int countSpecialSegments(const vector<int> &perm, int n) {
-  int specialCount = 0;
-
-  // Deque to maintain the maximum in the current range
-  deque<int> dq;
-
-  // Iterate over every possible starting point 'l'
-  for (int l = 0; l < n; ++l) {
-    // Clear deque for new segment
-    dq.clear();
-
-    // Iterate over all possible ending points 'r' from l to n-1
-    for (int r = l; r < n; ++r) {
-      // Maintain maximum element in the deque
-      while (!dq.empty() && dq.back() < perm[r]) {
-        dq.pop_back();
-      }
-      dq.push_back(perm[r]);
-
-      // The maximum in the current range [l, r] is dq.front()
-      if (perm[l] + perm[r] == dq.front()) {
-        ++specialCount;
-      }
-    }
+int n, i, tot, ans, a[N], bz[N], l[N], r[N], dui[N];
+void pd(int x, int y) {
+  for (int i = x, pl; i < y; i++) {
+    pl = bz[a[y] - a[i]];
+    if (pl > y && pl <= r[y])
+      ans++;
   }
-
-  return specialCount;
 }
-
+void ps(int x, int y) {
+  for (int i = y, pl; i > x; i--) {
+    pl = bz[a[x] - a[i]];
+    if (pl < x && pl >= l[x])
+      ans++;
+  }
+}
 int main() {
   int n;
   cin >> n;
-  vector<int> perm(n);
 
-  for (int i = 0; i < n; ++i) {
-    cin >> perm[i];
+  for (i = 1; i <= n; i++) {
+    cin >> a[i];
+    bz[a[i]] = i;
   }
-
-  cout << countSpecialSegments(perm, n) << endl;
-
+  for (i = 1; i <= n; i++) {
+    while (a[dui[tot]] < a[i] && tot)
+      tot--;
+    l[i] = dui[tot] + 1;
+    dui[++tot] = i;
+  }
+  tot = 0;
+  dui[0] = n + 1;
+  for (i = n; i >= 1; i--) {
+    while (a[dui[tot]] < a[i] && tot)
+      tot--;
+    r[i] = dui[tot] - 1;
+    dui[++tot] = i;
+  }
+  for (i = 1; i <= n; i++)
+    if (i - l[i] < r[i] - i)
+      pd(l[i], i);
+    else
+      ps(i, r[i]);
+  cout << ans << endl;
   return 0;
 }

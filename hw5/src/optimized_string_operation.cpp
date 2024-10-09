@@ -1,3 +1,4 @@
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -6,7 +7,6 @@ const int MOD = 1e9 + 7;
 long long calculateFinalLength(string s, int m, int k,
                                vector<string> &replacements) {
   vector<long long> length(26);
-
   for (int i = 0; i < k; ++i) {
     length[i] = 1;
   }
@@ -14,11 +14,12 @@ long long calculateFinalLength(string s, int m, int k,
   for (int step = 0; step < m; ++step) {
     vector<long long> newLength(26, 0);
 
-    // Update the length of each character based on the replacement rules
     for (int i = 0; i < k; ++i) {
       long long newLen = 0;
       for (char ch : replacements[i]) {
-        newLen = (newLen + length[ch - 'a']) % MOD;
+        newLen += length[ch - 'a'];
+        if (newLen >= MOD)
+          newLen -= MOD;
       }
       newLength[i] = newLen;
     }
@@ -28,7 +29,9 @@ long long calculateFinalLength(string s, int m, int k,
 
   long long finalLength = 0;
   for (char ch : s) {
-    finalLength = (finalLength + length[ch - 'a']) % MOD;
+    finalLength += length[ch - 'a'];
+    if (finalLength >= MOD)
+      finalLength -= MOD;
   }
 
   return finalLength;
